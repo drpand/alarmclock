@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Минималистичный будильник</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="settings">
+        <button class="settings-btn"><i class="fas fa-cog"></i></button>
+        <div class="settings-menu">
+            <div class="settings-header">Настройки</div>
+            <div class="theme-options">
+                <div class="settings-section-title">Тема</div>
+                <button class="theme-btn active" data-theme="blue">Синяя тема</button>
+                <button class="theme-btn" data-theme="bw">Ч/Б тема</button>
+            </div>
+        </div>
+    </div>
+    <div class="alarm-settings">
+        <button class="alarm-settings-btn"><i class="fas fa-bell"></i></button>
+        <div class="alarm-menu">
+            <div class="alarm-header">
+                <h3>Будильники</h3>
+                <button class="add-alarm-btn"><i class="fas fa-plus"></i></button>
+            </div>
+            <div class="alarm-form-container">
+                <form class="alarm-form">
+                    <input type="hidden" name="id">
+                    <div class="form-row">
+                        <div class="time-picker">
+                            <input type="time" name="time" required>
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="date-picker">
+                            <input type="date" name="date" required>
+                            <i class="fas fa-calendar"></i>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="label-input">
+                            <input type="text" name="label" placeholder="Название будильника">
+                            <i class="fas fa-tag"></i>
+                        </div>
+                        <button type="submit" class="save-btn">
+                            <i class="fas fa-save"></i>
+                            <span>Сохранить</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="alarms-list">
+                <!-- Сюда будут добавляться будильники -->
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="clock">
+            <div class="circle">
+                <i></i>
+                <i></i>
+                <i></i>
+                <span style="--i:1"><b>1</b></span>
+                <span style="--i:2"><b>2</b></span>
+                <span style="--i:3"><b>3</b></span>
+                <span style="--i:4"><b>4</b></span>
+                <span style="--i:5"><b>5</b></span>
+                <span style="--i:6"><b>6</b></span>
+                <span style="--i:7"><b>7</b></span>
+                <span style="--i:8"><b>8</b></span>
+                <span style="--i:9"><b>9</b></span>
+                <span style="--i:10"><b>10</b></span>
+                <span style="--i:11"><b>11</b></span>
+                <span style="--i:12"><b>12</b></span>
+            </div>
+        </div>
+        <div class="digital-clock">00:00:00</div>
+        <div class="digital-date">1 января 2025</div>
+        <audio id="alarm-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" loop></audio>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
