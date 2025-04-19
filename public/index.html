@@ -56,6 +56,47 @@
             </div>
         </div>
     </div>
+    <div class="todo-settings">
+        <button class="todo-settings-btn"><i class="fas fa-tasks"></i></button>
+        <div class="todo-menu">
+            <div class="todo-header">
+                <h3>Список дел</h3>
+                <button class="add-todo-btn"><i class="fas fa-plus"></i></button>
+            </div>
+            <div class="todo-form-container">
+                <form class="todo-form">
+                    <input type="hidden" name="id">
+                    <div class="form-row">
+                        <div class="todo-input">
+                            <input type="text" name="task" placeholder="Новая задача" required>
+                            <i class="fas fa-pencil-alt"></i>
+                        </div>
+                        <div class="priority-picker">
+                            <select name="priority">
+                                <option value="low">Низкий</option>
+                                <option value="medium">Средний</option>
+                                <option value="high">Высокий</option>
+                            </select>
+                            <i class="fas fa-flag"></i>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="date-picker">
+                            <input type="date" name="deadline">
+                            <i class="fas fa-calendar"></i>
+                        </div>
+                        <button type="submit" class="save-btn">
+                            <i class="fas fa-save"></i>
+                            <span>Сохранить</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="todos-list">
+                <!-- Сюда будут добавляться задачи -->
+            </div>
+        </div>
+    </div>
     <div class="container">
         <div class="clock">
             <div class="circle">

@@ -13,9 +13,23 @@ const alarmForm = document.querySelector('.alarm-form');
 const alarmsList = document.querySelector('.alarms-list');
 const alarmAudio = document.querySelector('#alarm-sound');
 const themeButtons = document.querySelectorAll('.theme-btn');
+const todoSettingsBtn = document.querySelector('.todo-settings-btn');
+const todoMenu = document.querySelector('.todo-menu');
+const addTodoBtn = document.querySelector('.add-todo-btn');
+const todoFormContainer = document.querySelector('.todo-form-container');
+const todoForm = document.querySelector('.todo-form');
+const todosList = document.querySelector('.todos-list');
 
 let alarms = [];
 let activeAlarm = null;
+let todos = [];
+
+// Функция для закрытия всех меню
+function closeAllMenus() {
+    if (settingsMenu) settingsMenu.classList.remove('active');
+    if (alarmMenu) alarmMenu.classList.remove('active');
+    if (todoMenu) todoMenu.classList.remove('active');
+}
 
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
@@ -39,12 +53,80 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Загрузка сохраненных задач
+    const savedTodos = localStorage.getItem('todos');
+    if (savedTodos) {
+        todos = JSON.parse(savedTodos);
+        renderTodos();
+    }
+    
     // Инициализация часов
     updateClock();
     setInterval(updateClock, 1000);
     
     // Добавляем обработчики событий для кнопок в меню
     setupMenuButtons();
+    
+    // Инициализация обработчиков для меню задач
+    if (todoSettingsBtn && todoMenu) {
+        todoSettingsBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            closeAllMenus();
+            todoMenu.classList.toggle('active');
+        });
+    }
+
+    if (addTodoBtn && todoFormContainer) {
+        addTodoBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            todoFormContainer.classList.toggle('active');
+        });
+    }
+
+    if (todoForm) {
+        todoForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const id = formData.get('id');
+            const task = formData.get('task');
+            const priority = formData.get('priority');
+            const deadline = formData.get('deadline');
+
+            if (task) {
+                if (id) {
+                    // Редактирование существующей задачи
+                    const index = todos.findIndex(t => t.id === parseInt(id));
+                    if (index !== -1) {
+                        todos[index] = {
+                            ...todos[index],
+                            task,
+                            priority,
+                            deadline,
+                        };
+                    }
+                } else {
+                    // Добавление новой задачи
+                    const todo = {
+                        id: Date.now(),
+                        task,
+                        priority,
+                        deadline,
+                        completed: false
+                    };
+                    todos.push(todo);
+                }
+
+                // Сохраняем задачи в localStorage
+                localStorage.setItem('todos', JSON.stringify(todos));
+
+                renderTodos();
+                e.target.reset();
+                todoFormContainer.classList.remove('active');
+            }
+        });
+    }
 });
 
 // Настройка обработчиков событий для кнопок в меню
@@ -138,8 +220,8 @@ if (settingsBtn && settingsMenu) {
     settingsBtn.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
+        closeAllMenus(); // Закрываем все меню перед открытием
         settingsMenu.classList.toggle('active');
-        if (alarmMenu) alarmMenu.classList.remove('active');
     });
 }
 
@@ -148,18 +230,30 @@ if (alarmSettingsBtn && alarmMenu) {
     alarmSettingsBtn.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
+        closeAllMenus(); // Закрываем все меню перед открытием
         alarmMenu.classList.toggle('active');
-        if (settingsMenu) settingsMenu.classList.remove('active');
+    });
+}
+
+// Todo menu toggle
+if (todoSettingsBtn && todoMenu) {
+    todoSettingsBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        closeAllMenus(); // Закрываем все меню перед открытием
+        todoMenu.classList.toggle('active');
     });
 }
 
 // Close menus when clicking outside
 document.addEventListener('click', function(e) {
-    if (settingsMenu && settingsBtn && !settingsMenu.contains(e.target) && !settingsBtn.contains(e.target)) {
-        settingsMenu.classList.remove('active');
-    }
-    if (alarmMenu && alarmSettingsBtn && !alarmMenu.contains(e.target) && !alarmSettingsBtn.contains(e.target)) {
-        alarmMenu.classList.remove('active');
+    if (!e.target.closest('.settings-menu') && 
+        !e.target.closest('.settings-btn') && 
+        !e.target.closest('.alarm-menu') && 
+        !e.target.closest('.alarm-settings-btn') &&
+        !e.target.closest('.todo-menu') &&
+        !e.target.closest('.todo-settings-btn')) {
+        closeAllMenus();
     }
 });
 
@@ -361,5 +455,108 @@ function stopAlarm() {
         if (notification) {
             notification.remove();
         }
+    }
+}
+
+// Отображение списка задач
+function renderTodos() {
+    if (!todosList) return;
+
+    todosList.innerHTML = todos
+        .map(todo => `
+            <div class="todo-item" data-id="${todo.id}">
+                <div class="todo-info">
+                    <div class="todo-task ${todo.completed ? 'completed' : ''}">${todo.task}</div>
+                    ${todo.deadline ? `<div class="todo-deadline">${formatDate(todo.deadline)}</div>` : ''}
+                    <span class="todo-priority ${todo.priority}">${getPriorityText(todo.priority)}</span>
+                </div>
+                <div class="todo-controls">
+                    <button class="todo-toggle ${todo.completed ? 'completed' : ''}" data-id="${todo.id}">
+                        <i class="fas ${todo.completed ? 'fa-check-circle' : 'fa-circle'}"></i>
+                    </button>
+                    <button class="todo-edit" data-id="${todo.id}">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="todo-delete" data-id="${todo.id}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `)
+        .join('');
+
+    // Добавляем обработчики для кнопок
+    todosList.querySelectorAll('.todo-toggle').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const id = parseInt(this.getAttribute('data-id'));
+            toggleTodo(id);
+        });
+    });
+
+    todosList.querySelectorAll('.todo-edit').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const id = parseInt(this.getAttribute('data-id'));
+            editTodo(id);
+        });
+    });
+
+    todosList.querySelectorAll('.todo-delete').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const id = parseInt(this.getAttribute('data-id'));
+            deleteTodo(id);
+        });
+    });
+}
+
+// Переключение статуса задачи
+function toggleTodo(id) {
+    const todo = todos.find(t => t.id === id);
+    if (todo) {
+        todo.completed = !todo.completed;
+        localStorage.setItem('todos', JSON.stringify(todos));
+        renderTodos();
+    }
+}
+
+// Редактирование задачи
+function editTodo(id) {
+    const todo = todos.find(t => t.id === id);
+    if (todo && todoForm) {
+        todoForm.querySelector('[name="id"]').value = todo.id;
+        todoForm.querySelector('[name="task"]').value = todo.task;
+        todoForm.querySelector('[name="priority"]').value = todo.priority;
+        if (todo.deadline) {
+            todoForm.querySelector('[name="deadline"]').value = todo.deadline;
+        }
+
+        todoFormContainer.classList.add('active');
+        todoFormContainer.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+// Удаление задачи
+function deleteTodo(id) {
+    todos = todos.filter(todo => todo.id !== id);
+    localStorage.setItem('todos', JSON.stringify(todos));
+    renderTodos();
+}
+
+// Получение текста приоритета
+function getPriorityText(priority) {
+    switch (priority) {
+        case 'low':
+            return 'Низкий';
+        case 'medium':
+            return 'Средний';
+        case 'high':
+            return 'Высокий';
+        default:
+            return '';
     }
 } 

@@ -574,6 +574,8 @@ body {
     display: none;
     animation: fadeIn 0.3s ease;
     z-index: 1000;
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 .alarm-menu.active {
@@ -893,4 +895,248 @@ body {
 .theme-btn.active {
     background: var(--button-hover);
     font-weight: bold;
+}
+
+/* Стили для списка дел */
+.todo-settings {
+    position: fixed;
+    top: 20px;
+    left: 70px;
+    z-index: 1000;
+}
+
+.todo-settings-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--button-bg);
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    transition: all 0.3s;
+    position: relative;
+    z-index: 1001;
+}
+
+.todo-settings-btn:hover {
+    background: var(--button-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.todo-menu {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    min-width: 300px;
+    display: none;
+    animation: fadeIn 0.3s ease;
+    z-index: 1000;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.todo-menu.active {
+    display: block;
+}
+
+.todo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.todo-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 18px;
+}
+
+.add-todo-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--button-bg);
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.add-todo-btn:hover {
+    background: var(--button-hover);
+    transform: scale(1.1);
+}
+
+.todo-form-container {
+    display: none;
+    margin-bottom: 15px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 5px;
+}
+
+.todo-form-container.active {
+    display: block;
+}
+
+.todo-input {
+    position: relative;
+    flex: 1;
+}
+
+.todo-input input {
+    width: 100%;
+    padding: 8px 30px 8px 10px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.priority-picker {
+    position: relative;
+    width: 120px;
+}
+
+.priority-picker select {
+    width: 100%;
+    padding: 8px 30px 8px 10px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.9);
+    appearance: none;
+    cursor: pointer;
+}
+
+.priority-picker i {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    pointer-events: none;
+}
+
+.todos-list {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-top: 15px;
+}
+
+.todo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.todo-item:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.todo-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.todo-task {
+    font-size: 16px;
+    color: #333;
+}
+
+.todo-deadline {
+    font-size: 12px;
+    color: #666;
+}
+
+.todo-priority {
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-left: 10px;
+}
+
+.todo-priority.low {
+    background: #4CAF50;
+    color: white;
+}
+
+.todo-priority.medium {
+    background: #FFA726;
+    color: white;
+}
+
+.todo-priority.high {
+    background: #f44336;
+    color: white;
+}
+
+.todo-controls {
+    display: flex;
+    gap: 5px;
+}
+
+.todo-toggle,
+.todo-edit,
+.todo-delete {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    color: white;
+    transition: all 0.3s;
+}
+
+.todo-toggle {
+    background: var(--button-bg);
+}
+
+.todo-toggle.completed {
+    background: #4CAF50;
+}
+
+.todo-edit {
+    background: #FFA726;
+}
+
+.todo-delete {
+    background: #f44336;
+}
+
+.todo-toggle:hover,
+.todo-edit:hover,
+.todo-delete:hover {
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.todo-task.completed {
+    text-decoration: line-through;
+    color: #999;
 } 
